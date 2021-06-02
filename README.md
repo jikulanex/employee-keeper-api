@@ -8,13 +8,13 @@ From your terminal, type:
 
 ```sh
 git clone git@github.com:jikulanex/employee-keeper-api.git
-npm install
+cd employee-keeper-api
 ```
 
 Then
 
 ```sh
-cd employee-keeper-api
+npm install
 npm start
 ```
 
