@@ -70,7 +70,7 @@ exports.createSkill = (req, res, next) => {
 };
 
 // @desc   Update skill
-// @route  POST /api/v1/skills/:id
+// @route  PUT /api/v1/skills/:id
 // @access Private
 exports.updateSkill = (req, res, next) => {
   const capturedSkill = findSkill(skills, req.params.id, () => {
@@ -117,11 +117,9 @@ exports.deleteSkill = (req, res, next) => {
     return Number(item.id) !== Number(req.params.id);
   });
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      msg: `Delete skill ${req.params.id}`,
-      skills: deletedSkill,
-    });
+  res.status(200).json({
+    success: true,
+    msg: `Delete skill ${req.params.id}`,
+    skills: deletedSkill,
+  });
 };

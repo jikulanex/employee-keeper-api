@@ -65,7 +65,7 @@ exports.createEmployee = (req, res, next) => {
 };
 
 // @desc   Update employee
-// @route  POST /api/v1/employees/:id
+// @route  PUT /api/v1/employees/:id
 // @access Private
 exports.updateEmployee = (req, res, next) => {
   const capturedEmployee = findEmployee(employees, req.params.id, () => {
