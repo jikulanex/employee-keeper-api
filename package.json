@@ -1,0 +1,31 @@
+{
+  "name": "employee-keeper-api",
+  "version": "1.0.0",
+  "description": "Employee keeper web server",
+  "main": "server.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server",
+    "dev": "nodemon server",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "employee-keeper",
+    "express.js",
+    "api"
+  ],
+  "author": "Siegfred Balona",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "faker": "^5.5.3",
+    "husky": "^6.0.0",
+    "nodemon": "^2.0.7",
+    "prettier": "2.3.0",
+    "pretty-quick": "^3.1.0"
+  }
+}
