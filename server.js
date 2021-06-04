@@ -2,6 +2,12 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const cors = require("cors");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xssClean = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
 const connectDB = require("./config/db");
 
 // Load custom error handler.
@@ -29,6 +35,29 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+// Sanitize data.
+app.use(mongoSanitize());
+
+// Set security headers.
+app.use(helmet());
+
+// Prevent XSS attacks.
+app.use(xssClean());
+
+// Setup rate limiter.
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100,
+});
+// Rate limit requests.
+app.use(limiter);
+
+// Prevent http param pollution.
+app.use(hpp());
+
+// Enable `cors`.
+app.use(cors());
 
 // Mount the `employee` router.
 app.use("/api/v1/employees", employees);
