@@ -1,125 +1,131 @@
-let skills = [
-  { id: 0, name: "HTML" },
-  { id: 1, name: "CSS" },
-  { id: 2, name: "JavaScript" },
-  { id: 3, name: "Node.js" },
-  { id: 4, name: "PHP" },
-  { id: 5, name: "Python" },
-  { id: 6, name: "Java" },
-  { id: 7, name: "Rust" },
-  { id: 8, name: "Assembly" },
-  { id: 9, name: "C" },
-  { id: 10, name: "C++" },
-  { id: 11, name: "C#" },
-  { id: 12, name: "React.js" },
-  { id: 13, name: "Vue.js" },
-  { id: 14, name: "Angular" },
-  { id: 15, name: "Next.js" },
-];
+const Skill = require("../models/Skills");
 
-// Find skill data.
-const findSkill = (skills, inputId, callback) => {
-  const capturedSkill = skills.find((item) => {
-    return Number(item.id) === Number(inputId);
-  });
+// Import custom error response class.
+const ErrorResponse = require("../utils/errorResponse");
 
-  if (!capturedSkill) {
-    callback();
-  }
-
-  return capturedSkill;
-};
+// Import utility functions
+const { executeDbAction, checkIfDataIsNull } = require("../utils");
 
 // @desc   Get all skills
 // @route  GET /api/v1/skills
 // @access Public
 exports.getSkills = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: "Show all skills", skills: skills });
+  executeDbAction(
+    async () => {
+      // Fetch all skill data.
+      const skills = await Skill.find();
+
+      res
+        .status(200)
+        .json({ success: true, count: skills.length, data: skills });
+    },
+    (error) => {
+      next(error);
+      // res.status(400).json({ success: false })
+    }
+  );
 };
 
 // @desc   Get single skill
 // @route  GET /api/v1/skills/:id
 // @access Public
 exports.getSkill = (req, res, next) => {
-  const capturedSkill = findSkill(skills, req.params.id, () => {
-    res.status(400).json({
-      success: false,
-      msg: `Cannot find skill ${req.params.id}`,
-    });
-  });
+  executeDbAction(
+    async () => {
+      // Find skill data based on the given ID.
+      const skill = await Skill.findById(req.params.id);
 
-  res.status(200).json({
-    success: true,
-    msg: `Show skill ${req.params.id}`,
-    skills: capturedSkill,
-  });
+      // When a correctly-formatted ID is passed but skill data is null, send error 400.
+      checkIfDataIsNull(skill, () => {
+        return next(
+          new ErrorResponse(
+            `Skill data not found with id ${req.params.id}`,
+            404
+          )
+        );
+      });
+
+      res.status(200).json({ success: true, data: skill });
+    },
+    (error) => {
+      next(error);
+      // res.status(400).json({ success: false })
+    }
+  );
 };
 
 // @desc   Create new skill
 // @route  POST /api/v1/skills
 // @access Private
 exports.createSkill = (req, res, next) => {
-  const newSkill = { id: skills.length, ...req.body };
-  skills = [...skills, newSkill];
+  executeDbAction(
+    async () => {
+      // Create new skill data.
+      const skill = await Skill.create(req.body);
 
-  res
-    .status(200)
-    .json({ success: true, msg: "Create new skill", skill: newSkill });
+      res.status(200).json({ success: true, data: skill });
+    },
+    (error) => {
+      next(error);
+      // res.status(400).json({ success: false })
+    }
+  );
 };
 
 // @desc   Update skill
 // @route  PUT /api/v1/skills/:id
 // @access Private
 exports.updateSkill = (req, res, next) => {
-  const capturedSkill = findSkill(skills, req.params.id, () => {
-    res.status(400).json({
-      success: false,
-      msg: `Unable to update. Cannot find skill ${req.params.id}`,
-    });
-  });
+  executeDbAction(
+    async () => {
+      // Find and update skill data.
+      const skill = await Skill.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
 
-  let updatedSkill;
+      // When a correctly-formatted ID is passed but skill data is null, send error 400.
+      checkIfDataIsNull(skill, () => {
+        return next(
+          new ErrorResponse(
+            `Skill data not found with id ${req.params.id}`,
+            404
+          )
+        );
+      });
 
-  skills = skills.map((item) => {
-    if (Number(item.id) === Number(capturedSkill.id)) {
-      updatedSkill = { ...item, ...req.body };
-      return updatedSkill;
+      res.status(200).json({ success: true, data: skill });
+    },
+    (error) => {
+      next(error);
+      // res.status(400).json({ success: false })
     }
-    return item;
-  });
-
-  res.status(200).json({
-    success: true,
-    msg: `Update skill ${req.params.id}`,
-    skill: updatedSkill,
-  });
+  );
 };
 
 // @desc   Delete skill
 // @route  DELETE /api/v1/skills/:id
 // @access Private
 exports.deleteSkill = (req, res, next) => {
-  const capturedSkill = findSkill(skills, req.params.id, () => {
-    res.status(400).json({
-      success: false,
-      msg: `Unable to delete. Cannot find skill ${req.params.id}`,
-    });
-  });
+  executeDbAction(
+    async () => {
+      // Find and delete skill data.
+      const skill = await Skill.findByIdAndDelete(req.params.id);
 
-  let deletedSkill;
+      // When a correctly-formatted ID is passed but skill data is null, send error 400.
+      checkIfDataIsNull(skill, () => {
+        return next(
+          new ErrorResponse(
+            `Skill data not found with id ${req.params.id}`,
+            404
+          )
+        );
+      });
 
-  skills = skills.filter((item) => {
-    if (Number(item.id) === Number(capturedSkill.id)) {
-      deletedSkill = item;
+      res.status(200).json({ success: true, data: {} });
+    },
+    (error) => {
+      next(error);
     }
-    return Number(item.id) !== Number(req.params.id);
-  });
-
-  res.status(200).json({
-    success: true,
-    msg: `Delete skill ${req.params.id}`,
-    skills: deletedSkill,
-  });
+  );
 };
