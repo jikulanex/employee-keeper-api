@@ -1,0 +1,14 @@
+[
+  {
+    "firstName": "Steve",
+    "lastName": "Jobs",
+    "birthDate": "1955-02-24",
+    "skills": ["HTML", "CSS", "JavaScript"]
+  },
+  {
+    "firstName": "Steve",
+    "lastName": "Wozniak",
+    "birthDate": "1950-08-11",
+    "skills": ["HTML", "CSS", "JavaScript"]
+  }
+]

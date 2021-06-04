@@ -1,0 +1,18 @@
+[
+  { "id": 0, "name": "HTML" },
+  { "id": 1, "name": "CSS" },
+  { "id": 2, "name": "JavaScript" },
+  { "id": 3, "name": "Node.js" },
+  { "id": 4, "name": "PHP" },
+  { "id": 5, "name": "Python" },
+  { "id": 6, "name": "Java" },
+  { "id": 7, "name": "Rust" },
+  { "id": 8, "name": "Assembly" },
+  { "id": 9, "name": "C" },
+  { "id": 10, "name": "C++" },
+  { "id": 11, "name": "C#" },
+  { "id": 12, "name": "React.js" },
+  { "id": 13, "name": "Vue.js" },
+  { "id": 14, "name": "Angular" },
+  { "id": 15, "name": "Next.js" }
+]
