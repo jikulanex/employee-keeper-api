@@ -68,7 +68,7 @@ app.use("/api/v1/skills", skills);
 app.use(errorHandler);
 
 // Initialize server port.
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 // Run the server.
 const server = app.listen(port, () => {
